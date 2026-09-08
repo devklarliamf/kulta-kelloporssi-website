@@ -289,11 +289,11 @@
   .map-off .note{font-size:.85rem;margin-top:.9rem}
 
   /* ---------- Footer: the business details the law wants ---------- */
-  .foot-legal{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem .9rem;
-    margin-top:.7rem;font-size:.82rem}
-  .foot-legal a{text-decoration:underline;opacity:.85}
-  .foot-legal a:hover{opacity:1;color:#F3EEE4}
-  .foot-id{display:block;width:100%;text-align:center;margin-top:.5rem;opacity:.75;font-size:.8rem;font-style:normal}
+  /* The one added footer line. Inherits the footer's own size and colour, so it
+     reads as part of the existing row rather than as a new block. */
+  .fmeta{display:block;width:100%;text-align:center;margin-top:.5rem;opacity:.7}
+  .fmeta a{text-decoration:underline}
+  .fmeta a:hover{color:#F3EEE4}
 </style>
 </head>
 <body>
@@ -525,6 +525,20 @@
     <span class="fsep">·</span>
     <span class="fcopy">© <span id="yr">2026</span></span>
 
+    <!--
+      One extra line, in the footer's existing style and type size. This is the
+      minimum a business running a website has to publish: name, Y-tunnus and a
+      route to the privacy statement (laki tietoyhteiskunnan palvelujen
+      tarjoamisesta 7 §, and GDPR Art 13 for the privacy page). Both facts come
+      from PRH, measured 2026-09-08. Nothing above this line moved.
+    -->
+    <span class="fmeta">
+      Y-tunnus 0903157-5
+      <span class="fsep">·</span>
+      <a href="tietosuoja.html">Tietosuoja</a>
+      <span class="fsep">·</span>
+      <a href="evasteet.html">Evästeet</a>
+    </span>
   </div>
 </footer>
 
