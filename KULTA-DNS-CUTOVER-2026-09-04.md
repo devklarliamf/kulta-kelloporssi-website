@@ -93,6 +93,13 @@ the default onboarding path** — but that account and its API token do not exis
 are operator-only to provision. **Do not put it on the 4 September critical path.**
 Kulta flips through the owner's panel, the ani.fi way.
 
+**ANSWERED 2026-09-03 — the operator states nobody uses `@kulta-kello.fi` mail.**
+That downgrades steps 1 and 2 below from mandatory to optional. The mailbox is still
+measurably alive (Exim answering, DKIM key in the zone, §5), so this is the owner's word
+over a live server: if anything *is* delivered there, it stops at the flip and nothing
+bounces back to us. Step 3 (dropping `+a` from SPF) stays — it is anti-spoofing hygiene
+and costs one edit. The minimum flip is now **step 3 + step 4**.
+
 **On the day — the record changes, in this order. Order is load-bearing.**
 
 1. `mail.kulta-kello.fi`: CNAME → **`web152.webhotelli.fi`** (not a pinned A — see the
