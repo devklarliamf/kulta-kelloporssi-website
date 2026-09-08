@@ -12,9 +12,16 @@
 <meta property="og:image" content="images/rings.jpg" />
 <meta property="og:locale" content="fi_FI" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<!--
+  Fonts are served from this domain, not from Google's.
+
+  A <link> to fonts.googleapis.com sends every visitor's IP address to Google
+  before the page has painted and before anyone has consented to anything. That
+  is the transfer the Munich Regional Court decided against a site operator in
+  January 2022 (3 O 17493/20). Both families are SIL Open Font License 1.1,
+  which permits self-hosting; the licence text ships in fonts/OFL.txt.
+-->
+<link href="fonts/fonts.css" rel="stylesheet" />
 
 <style>
   :root{
@@ -39,8 +46,28 @@
   img{max-width:100%;display:block}
   .wrap{width:min(1200px,92vw);margin-inline:auto}
 
+  /* Gold gradient text.
+     Two variants, because one palette cannot serve both grounds. Measured on
+     2026-09-08 with the WCAG contrast formula:
+
+       .gold        on --red-deep #4A1217 : lightest stop 7.7:1   PASS
+       .gold        on --cream    #F4EDE1 : lightest stop 1.7:1   FAIL
+       .gold-light  on --cream    #F4EDE1 : lightest stop 3.9:1   PASS (large text)
+
+     The old .gold was being used on the cream headings too, where the pale
+     stops were all but invisible. Light grounds now get .gold-light, whose
+     darkest-to-lightest range stays above the 3:1 that WCAG AA requires for
+     text at this size (these headings are 29px+ at weight 600). */
   .gold{background:linear-gradient(176deg,#F7ECCB 6%,var(--gold-2) 48%,var(--gold-3) 96%);
         -webkit-background-clip:text;background-clip:text;color:transparent}
+  .gold-light{background:linear-gradient(176deg,#96702C 6%,#7E5F24 52%,#6E5220 96%);
+        -webkit-background-clip:text;background-clip:text;color:transparent}
+  /* If background-clip:text is unsupported the text would render transparent,
+     i.e. invisible. @supports guarantees a real colour first. */
+  @supports not ((-webkit-background-clip:text) or (background-clip:text)){
+    .gold{color:var(--gold-2);background:none}
+    .gold-light{color:#6E5220;background:none}
+  }
   .divider{height:2px;border:0;width:66px;
         background:linear-gradient(90deg,transparent,var(--gold-2),var(--gold-3),var(--gold-2),transparent)}
   .divider.center{margin-inline:auto}
@@ -226,10 +253,52 @@
   }
   @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}
     .chain-track{animation:none;justify-content:center;flex-wrap:wrap;width:auto}}
+
+  /* ---------- Accessibility ---------- added 2026-09-08 ---------- */
+
+  /* Skip link. First in the tab order, off-screen until focused. */
+  .skip{position:absolute;left:-9999px;top:0;z-index:99;background:var(--red);color:#F3EEE4;
+    padding:.9rem 1.4rem;font-size:.9rem;letter-spacing:.05em}
+  .skip:focus{left:0}
+
+  /* The page had NO focus styles at all: `a{color:inherit;text-decoration:none}`
+     with nothing on :focus meant a keyboard user could not see where they were.
+     :focus-visible keeps the ring off for mouse clicks. */
+  a:focus-visible,button:focus-visible,[tabindex]:focus-visible{
+    outline:3px solid var(--red-2);outline-offset:3px;border-radius:2px}
+  .hero-actions a:focus-visible,.btn-outline:focus-visible{outline-color:var(--gold-2)}
+
+  /* The marquee pauses on hover, but a keyboard could never reach it, and WCAG
+     2.2.2 wants a way to stop motion that starts by itself and runs past five
+     seconds. It now pauses on focus too, and there is a real button. */
+  .chain:focus-within .chain-track{animation-play-state:paused}
+  .chain.paused .chain-track{animation-play-state:paused}
+  .chain-controls{text-align:center;margin-top:1.1rem}
+  .chain-pause{display:inline-flex;align-items:center;gap:.45rem;
+    background:none;border:1px solid var(--line);color:var(--muted);cursor:pointer;
+    padding:.5rem 1rem;border-radius:2px;font:inherit;font-size:.85rem;letter-spacing:.06em;
+    text-transform:uppercase}
+  .chain-pause:hover{border-color:var(--gold-2);color:var(--ink)}
+  @media(prefers-reduced-motion:reduce){.chain-controls{display:none}}
+
+  /* ---------- Click-to-load map ---------- */
+  .map-off{background:var(--paper);padding:2.2rem 1.4rem;text-align:center}
+  .map-off h3{font-size:1.35rem;margin-bottom:.5rem}
+  .map-off p{color:var(--muted);font-size:.96rem;max-width:52ch;margin:0 auto .3rem}
+  .map-off .btn{margin-top:1.1rem}
+  .map-off .note{font-size:.85rem;margin-top:.9rem}
+
+  /* ---------- Footer: the business details the law wants ---------- */
+  .foot-legal{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem .9rem;
+    margin-top:.7rem;font-size:.82rem}
+  .foot-legal a{text-decoration:underline;opacity:.85}
+  .foot-legal a:hover{opacity:1;color:#F3EEE4}
+  .foot-id{display:block;width:100%;text-align:center;margin-top:.5rem;opacity:.75;font-size:.8rem;font-style:normal}
 </style>
 </head>
 <body>
 
+<a class="skip" href="#top">Siirry sisältöön</a>
 <div class="goldline"></div>
 <header>
   <div class="wrap nav">
@@ -321,7 +390,10 @@
           <div class="chip" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="9" ry="6"/><ellipse cx="12" cy="12" rx="4.5" ry="6"/></svg><span class="lab">Kultarannerengas</span></div>
         </div>
       </div>
-      <p class="gallery-note">Otos valikoimastamme, kuvat päivittyvät. Koko valikoiman näet parhaiten liikkeessä.</p>
+      <div class="chain-controls">
+        <button type="button" class="chain-pause" id="chainPause" aria-pressed="false">Pysäytä liike</button>
+      </div>
+      <p class="gallery-note">Kuvakkeet ovat piirroksia tuoteryhmistä, eivät kuvia myynnissä olevista koruista. Koko valikoiman näet liikkeessä.</p>
     </div>
   </section>
 
@@ -331,7 +403,7 @@
       <div class="head center">
         <span class="eyebrow">Palvelut</span>
         <hr class="divider center" style="margin:1.1rem auto">
-        <h2>Ostat tai myyt, <span class="gold">autamme mielellämme</span></h2>
+        <h2>Ostat tai myyt, <span class="gold-light">autamme mielellämme</span></h2>
         <p>Olitpa etsimässä ensimmäistä sormustasi tai myymässä vanhaa kultaa, meillä on aikaa sinulle. Ei ajanvarausta, tule vain sisään.</p>
       </div>
 
@@ -364,7 +436,20 @@
         </div>
       </div>
 
-      <p class="goldprice" id="goldprice" style="display:none">Kullan päivän hinta (24k): <b id="gp24">–</b> · pörssihinta, tarkka arvio aina liikkeessä.</p>
+      <!--
+        This is the world market (spot) price of pure gold, not what the shop
+        pays. A consumer standing in front of a jeweller's window is about to
+        SELL, so a bare per-gram figure next to "Ostamme kultaa" reads as an
+        offer. It is not one: a shop pays below spot, and a piece is rarely 24k.
+        The wording below says so in the same breath as the number, which is
+        what stops it being a misleading price indication.
+      -->
+      <p class="goldprice" id="goldprice" style="display:none">
+        Kullan maailmanmarkkinahinta (24k, puhdas kulta): <b id="gp24">–</b>.
+        Tämä on pörssin noteeraus, <b>ei hinta jonka maksamme</b>: koru on harvoin
+        24-karaattista, ja ostohintaan vaikuttavat pitoisuus, paino ja kunto.
+        Saat tarkan, sitovan arvion liikkeessä maksutta.
+      </p>
 
       <div class="svc-cta">
         <a class="btn btn-red" href="#sijainti">
@@ -388,7 +473,7 @@
         <p>Helsingin Kulta- &amp; Kellopörssi on palvellut Punavuoren sydämessä <strong>vuodesta 1993</strong>. Meille jokainen koru ja sormus on tärkeä. Otamme aikaa kuunnellaksemme, mitä juuri sinä etsit.</p>
         <p>Löydät meiltä <strong>kauniita kultakoruja ja sormuksia</strong>: kihla- ja vihkisormuksia, ketjuja, jalokiviä sekä vintage- ja perintökoruja. Autamme sinua rehellisesti ja kiireettä, niin ostaessa kuin myydessäkin.</p>
         <div class="est-line">
-          <span class="yr gold">1993</span>
+          <span class="yr gold-light">1993</span>
           <span class="yr-sub">Punavuori<br>Helsinki</span>
         </div>
       </div>
@@ -401,7 +486,7 @@
       <div class="head center">
         <span class="eyebrow">Tervetuloa liikkeeseen</span>
         <hr class="divider center" style="margin:1.1rem auto">
-        <h2>Sijainti ja <span class="gold">aukioloajat</span></h2>
+        <h2>Sijainti ja <span class="gold-light">aukioloajat</span></h2>
       </div>
 
       <div class="info-cols">
@@ -427,10 +512,20 @@
         </div>
       </div>
 
+      <!--
+        Click-to-load map. A Google Maps iframe sets Google's cookies the moment
+        the page paints. Those are not needed for anything the visitor asked
+        for, so under 205 § of the Act on Electronic Communications Services
+        they need consent first. Clicking the button IS that consent, and it is
+        why this site needs no cookie banner at all.
+      -->
       <div class="map-wrap" id="sijainti">
-        <iframe title="Helsingin Kulta- & Kellopörssi sijainti Google Mapsissa"
-          src="https://www.google.com/maps?q=Helsingin+Kulta-+%26+Kellop%C3%B6rssi,+Iso+Roobertinkatu+9,+00120+Helsinki&output=embed"
-          loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="map-off" id="mapOff">
+          <h3>Kartta</h3>
+          <p>Kartan tarjoaa Google, joka asettaa omat evästeensä heti kun kartta latautuu. Siksi se ei lataudu itsestään.</p>
+          <button type="button" class="btn btn-red" id="mapLoad">Lataa Google-kartta</button>
+          <p class="note">Kun lataat kartan, siihen sovelletaan <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Googlen tietosuojakäytäntöä</a>. Voit myös <a href="https://maps.google.com/?q=Helsingin+Kulta-+%26+Kellop%C3%B6rssi,+Iso+Roobertinkatu+9,+00120+Helsinki" target="_blank" rel="noopener">avata reitin uudessa välilehdessä</a>.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -448,6 +543,23 @@
     <span>Ma–Pe 10–18 · La 11–15</span>
     <span class="fsep">·</span>
     <span class="fcopy">© <span id="yr">2026</span></span>
+
+    <!--
+      Laki tietoyhteiskunnan palvelujen tarjoamisesta 7 § requires a business
+      that runs a website to give its name, registered address, an EMAIL
+      ADDRESS and its business ID, in a form that is easy to find. The shop's
+      Y-tunnus and email are not recorded anywhere in this repo, so they render
+      as visible {{TODO}} markers rather than as a guess.
+    -->
+    <address class="foot-id">
+      {{TODO: virallinen toiminimi}} · Y-tunnus {{TODO: Y-tunnus}} ·
+      Iso Roobertinkatu 9, 00120 Helsinki · {{TODO: sähköpostiosoite}}
+    </address>
+
+    <nav class="foot-legal" aria-label="Tietosuoja ja evästeet">
+      <a href="tietosuoja.html">Tietosuojaseloste</a>
+      <a href="evasteet.html">Evästeet</a>
+    </nav>
   </div>
 </footer>
 
@@ -474,6 +586,34 @@
       i=(i+1)%slides.length;
       slides[i].classList.add('active');
     },4500);
+  })();
+
+  // Marquee pause control (WCAG 2.2.2). Pauses both rows together.
+  (function(){
+    var btn=document.getElementById('chainPause');
+    if(!btn) return;
+    var rows=document.querySelectorAll('.chain');
+    btn.addEventListener('click',function(){
+      var paused=btn.getAttribute('aria-pressed')!=='true';
+      btn.setAttribute('aria-pressed',paused?'true':'false');
+      btn.textContent=paused?'Jatka liikettä':'Pysäytä liike';
+      for(var i=0;i<rows.length;i++) rows[i].classList.toggle('paused',paused);
+    });
+  })();
+
+  // Click-to-load Google map. Nothing reaches Google until the button is pressed.
+  (function(){
+    var btn=document.getElementById('mapLoad'), off=document.getElementById('mapOff');
+    if(!btn||!off) return;
+    btn.addEventListener('click',function(){
+      var f=document.createElement('iframe');
+      f.title='Helsingin Kulta- & Kellopörssi sijainti Google Mapsissa';
+      f.loading='lazy';
+      f.referrerPolicy='no-referrer-when-downgrade';
+      f.src='https://www.google.com/maps?q=Helsingin+Kulta-+%26+Kellop%C3%B6rssi,+Iso+Roobertinkatu+9,+00120+Helsinki&output=embed';
+      off.replaceWith(f);
+      f.focus();
+    });
   })();
 
   // live gold price -> EUR per gram (24k). Stays hidden if either feed fails.

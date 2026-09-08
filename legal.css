@@ -1,0 +1,61 @@
+/* Shared styling for tietosuoja.html and evasteet.html.
+   Same palette as index.html, one readable measure, no animation. */
+
+:root{
+  --red:#6E1B22; --red-deep:#4A1217; --red-2:#8E2A31;
+  --ink:#17140F; --muted:#5C5852;
+  --paper:#FCF9F3; --cream:#F4EDE1; --line:#E7DECF;
+  --gold-2:#D7B56A; --gold-3:#A67C32;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:118%}
+body{font-family:'Jost',system-ui,sans-serif;color:var(--ink);background:var(--paper);
+  line-height:1.72;font-weight:300;font-size:1.02rem}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;line-height:1.18;color:var(--ink)}
+a{color:var(--red-2);text-decoration:underline;text-underline-offset:2px}
+a:hover{color:var(--red)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--red-2);outline-offset:3px}
+
+.skip{position:absolute;left:-9999px;top:0;z-index:99;background:var(--red);color:#F3EEE4;
+  padding:.9rem 1.4rem;font-size:.9rem}
+.skip:focus{left:0}
+
+.goldline{height:3px;background:linear-gradient(90deg,var(--gold-3),#F2E2B4,var(--gold-2),#F2E2B4,var(--gold-3))}
+.topbar{border-bottom:1px solid var(--line);background:var(--cream)}
+.topbar .in{width:min(760px,92vw);margin-inline:auto;padding:1.1rem 0;
+  display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.topbar .bt{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.25rem;
+  color:var(--ink);text-decoration:none}
+.topbar .bt:hover{color:var(--red-2)}
+.topbar .back{font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+
+main{width:min(760px,92vw);margin-inline:auto;padding:3rem 0 5rem}
+h1{font-size:clamp(2rem,5vw,2.9rem);margin-bottom:.5rem}
+.updated{color:var(--muted);font-size:.88rem;margin-bottom:1.8rem}
+.intro{font-size:1.12rem;color:#3E3A34;margin-bottom:2.4rem}
+h2{font-size:1.5rem;margin:2.6rem 0 .7rem;color:var(--red-deep)}
+h3{font-size:1.15rem;margin:1.6rem 0 .4rem}
+p{margin-bottom:.9rem}
+ul{margin:0 0 1rem 1.3rem}
+li{margin-bottom:.45rem}
+strong,b{font-weight:500;color:var(--ink)}
+
+.callout{background:var(--cream);border-left:3px solid var(--gold-3);padding:1.2rem 1.4rem;
+  margin:1.6rem 0}
+.callout p:last-child{margin-bottom:0}
+
+dl.details{display:grid;grid-template-columns:auto 1fr;gap:.5rem 1.6rem;margin:1rem 0 0}
+dl.details dt{color:var(--muted);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+  padding-top:.3rem}
+dl.details dd{margin:0}
+
+footer{background:var(--red-deep);color:#C9BCA9;padding:1.6rem 0;font-size:.85rem;text-align:center}
+footer a{color:var(--gold-2)}
+footer a:hover{color:#F3EEE4}
+footer address{font-style:normal;opacity:.8;margin-top:.5rem;font-size:.8rem}
+.foot-nav{margin-top:.6rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+@media(max-width:560px){
+  dl.details{grid-template-columns:1fr;gap:.1rem}
+  dl.details dd{margin-bottom:.9rem}
+}
